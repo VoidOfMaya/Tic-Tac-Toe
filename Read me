@@ -1,0 +1,38 @@
+        Assignement: tic tac toe game
+
+key goals on the developement side:
+
+- implementation of encapsulation  and avoiding global variables 
+- the use of factory functions 
+- implementing IIFE (module pattern) where single instances of components are needed
+- thoughtfull code logic designe orgenization and structure for readability
+- create the game logic first in the console firstly befor html or css
+- create an object that handles the rendering of the game to the DOM
+
+
+psudo code:
+
+    main logic:-
+
+    * store game bored as array inside a Gameboard object
+    * create "X" and "O" player objects
+    * create object that handles "game flow"
+        - choosing player sign
+        - handling player turn
+        - checking for win - game over
+        - checking for a tie - game over
+        - keep score
+
+    DOM logic:-
+
+    *create a display/DOM logic object
+        -create function that renders the gameboard array position to the webpage
+        -create function that allows players to add  thier mark to specific spots on the board vie clicking
+            (implement logic to prevent taken spots to be changed)
+     
+        -create function for restarting game and keeping track
+        -start game  button
+        -restart game button
+        -player names
+        -player score
+ 
