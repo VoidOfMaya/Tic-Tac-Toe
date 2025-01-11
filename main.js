@@ -4,7 +4,7 @@ console.log("im working");
 const Gameboard = (function(){
     
 // co-responding index:=[1,2,3,4,5,6,7,8,9] this is index on a 3x3 grid starting from 1
-    let gameboardArr =  [0,0,1,0,0,1,0,0,1];
+    let gameboardArr =  ["","","","","","","","",""];
 
     //creating players
     const playerOne = Player(gameboardArr);
@@ -14,12 +14,26 @@ const Gameboard = (function(){
     playerTwo.Setmarker('o');
 
     
-    console.log(`Player one: ${playerOne.DisplayMarker()},\nplayer two: ${playerTwo.DisplayMarker()}`)
+    console.log(`Player one: ${playerOne.GetMarker()},\nplayer two: ${playerTwo.GetMarker()}`)
 
-    
+    playerOne.OccupiePosition(1);
+    console.log(gameboardArr);
+
+    playerTwo.OccupiePosition(2);
+    console.log(gameboardArr);
+
+    playerOne.OccupiePosition(0);
+    console.log(gameboardArr);
+
+    playerTwo.OccupiePosition(7);
+    console.log(gameboardArr);
+
+    playerOne.OccupiePosition(7);
+    console.log(gameboardArr);
+
     //GameFlow(playerOne,playerTwo);
     let govenor = GameFlow(gameboardArr, playerOne, playerTwo);
-    govenor.Checkwinner();
+    
 }());
 function GameFlow(gameArray, playerX, playerOne)
 {
@@ -63,20 +77,36 @@ function GameFlow(gameArray, playerX, playerOne)
 //factory function for player creation takes gameboard array so it can interact with it
 function Player(gameboardArray){
     let marker = 'none';
+    let innerArray =["","","","","","","","",""]
     return{
+        //get set methods for marker
         Setmarker(markerChoice){
         marker = markerChoice;
         },
-        DisplayMarker(){
+        GetMarker(){
         return marker;
         },
+        //set for internal array =>this keeps track of game progress
+        GetInnerArray(){
+            return innerArray},
 
         // takes a players position index and inputs marker to the coresponding position on the gameboard array
         OccupiePosition(positionChoice){
+            /*for(let i = 0; i < innerArray.length; i++){
+                if(innerArray[i] !== 0 || enemyPositions !== 0){
+                    gameboardArray.splice(positionChoice, 1, marker);
+                }
+                else{
+                    console.log("Action youre trying to make is not possible, This position is already occupied!")
+                }
+            }*/
 
-        if (gameboardArray[positionChoice] !== 'x' || gameboardArray[positionChoice] !== 'o'){
+            if (gameboardArray[positionChoice] != "x" || gameboardArray[positionChoice] != "o"){
             gameboardArray.splice(positionChoice, 1, marker);
-        }
+            }
+            else{
+                console.log("Action youre trying to make is not possible, This position is already occupied!")
+            }
         }
     }
 }
