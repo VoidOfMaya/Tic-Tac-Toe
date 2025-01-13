@@ -42,33 +42,39 @@ const Gameboard = (function(){
     let playerTurn = 'x';
     for(let i= 0; i < 9; i++){
         console.log(i);
-    
+        let win = 0;
         if(playerTurn == 'x' && gameOver == false){
             let XTurn = playerOne.OccupiePosition(prompt('X turn\npick position from 0 - 9'));
             if( XTurn != 0){
-                xgovenor.Checkwinner();
+                win = xgovenor.Checkwinner();
                 console.log(gameboardArr);
-
                 playerTurn ='o';
-
+                if ( win == 1){
+                    break;
+                }
             }
             else{
                 i--
                 playerTurn = 'x';
             }
-
         }
         else if(playerTurn == 'o'&& gameOver == false) {
             let OTurn = playerTwo.OccupiePosition(prompt('O turn\npick position from 0 - 9'));
             if( OTurn != 0){
-                ogovenor.Checkwinner();
+                win = ogovenor.Checkwinner();
                 console.log(gameboardArr);
-                playerTurn ='x';                
+                playerTurn ='x';
+                if ( win == 1){
+                    break;
+                }                             
             }
             else{
                 i--
                 playerTurn = 'o';
             }
+        }
+        if(i = 8 && win != 1){
+            console.log('no winner here, good luck next time');
         }
     }
 
@@ -77,11 +83,10 @@ const Gameboard = (function(){
 function GameFlow(gameArray, player)
 {
     return{
-        gameArray: gameArray,
-        Checkwinner() {
-
-            //converts player array to a readable form
-            let playerArr = player.GetInnerArray();
+        //gameArray: gameArray,
+        //converts player array to a readable form
+        ReadArr(array){    
+            let playerArr = array.GetInnerArray();
             for(let i = 0; i< playerArr.length; i++){
                 if(playerArr[i] == ""){
                     playerArr.splice(i,1,0);
@@ -90,22 +95,27 @@ function GameFlow(gameArray, player)
                     playerArr.splice(i,1,1);
                 }
             }
-       // corisponding index:= [1,2,3,4,5,6,7,8,9] this is index on a 3x3 grid starting from 1 
+            return  playerArr           
+        },
+        Checkwinner() {
+
+            const playerArr = this.ReadArr(player);
             const winningArr = [[1,1,1,0,0,0,0,0,0], //1
-                               [0,0,0,1,1,1,0,0,0], //2
-                               [0,0,0,0,0,0,1,1,1], //3
-                               [1,0,0,1,0,0,1,0,0], //4
-                               [0,1,0,0,1,0,0,1,0], //5
-                               [0,0,1,0,0,1,0,0,1], //6
-                               [1,0,0,0,1,0,0,0,1], //7
-                               [0,0,1,0,1,0,1,0,0]];//8 possible winn positions           
+                                [0,0,0,1,1,1,0,0,0], //2
+                                [0,0,0,0,0,0,1,1,1], //3
+                                [1,0,0,1,0,0,1,0,0], //4
+                                [0,1,0,0,1,0,0,1,0], //5
+                                [0,0,1,0,0,1,0,0,1], //6
+                                [1,0,0,0,1,0,0,0,1], //7
+                                [0,0,1,0,1,0,1,0,0]];//8 possible winn positions 
+
        //function for comparing the array with each winning position:
             for(let i = 0; i < winningArr.length; i++){
         //console.log(`winning position ${winningArr[i]}`);
                 var currentWinArr = winningArr[i].toString();
                 if(currentWinArr === playerArr.toString()){
                     console.log(`we have a winner at position ${i} `);
-                    break;
+                    return 1;
                 }
                 else{
                     console.log(`no win here`);
