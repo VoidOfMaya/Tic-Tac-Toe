@@ -8,42 +8,30 @@ const Gameboard = (function(){
 
     //creating players
     const playerOne = Player(gameboardArr);
-    playerOne.Setmarker('x');
+    playerOne.Setmarker(prompt('choose your marker X or O'));
 
     const playerTwo = Player(gameboardArr);
-    playerTwo.Setmarker('o');
+    if(playerOne.GetMarker == 'x'){
+        playerTwo.Setmarker('o');        
+    }
+    else{
+        playerTwo.Setmarker('x');
+    }
+
 
 
     
     console.log(`Player one: ${playerOne.GetMarker()},\nplayer two: ${playerTwo.GetMarker()}`)
 
-    //mock game play, for testing purposes
-    /*playerOne.OccupiePosition(1);
-    console.log(gameboardArr);
+    let xgovenor = GameFlow(playerOne);
+    let ogovenor = GameFlow(playerTwo);
+    let playerTurn = playerOne.GetMarker();
+    
 
-    playerTwo.OccupiePosition(2);
-    console.log(gameboardArr);
-
-    playerOne.OccupiePosition(0);
-    console.log(gameboardArr);
-
-    playerTwo.OccupiePosition(7);
-    console.log(gameboardArr);
-
-    playerOne.OccupiePosition(7);
-    console.log(gameboardArr);
-    console.log(playerOne.GetInnerArray());
-    console.log(playerTwo.GetInnerArray()); */
-
-    //GameFlow(playerOne,playerTwo);
-    let xgovenor = GameFlow(gameboardArr, playerOne);
-    let ogovenor = GameFlow(gameboardArr, playerTwo);
-    let gameOver = false;
-    let playerTurn = 'x';
     for(let i= 0; i < 9; i++){
         console.log(i);
         let win = 0;
-        if(playerTurn == 'x' && gameOver == false){
+        if(playerTurn == 'x'){
             let XTurn = playerOne.OccupiePosition(prompt('X turn\npick position from 0 - 9'));
             if( XTurn != 0){
                 win = xgovenor.Checkwinner();
@@ -58,7 +46,7 @@ const Gameboard = (function(){
                 playerTurn = 'x';
             }
         }
-        else if(playerTurn == 'o'&& gameOver == false) {
+        else if(playerTurn == 'o') {
             let OTurn = playerTwo.OccupiePosition(prompt('O turn\npick position from 0 - 9'));
             if( OTurn != 0){
                 win = ogovenor.Checkwinner();
@@ -80,7 +68,7 @@ const Gameboard = (function(){
 
     
 }());
-function GameFlow(gameArray, player)
+function GameFlow(player)
 {
     return{
         //gameArray: gameArray,
