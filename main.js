@@ -13,10 +13,12 @@ const Gameboard = (function(){
     const playerTwo = Player(gameboardArr);
     playerTwo.Setmarker('o');
 
+
     
     console.log(`Player one: ${playerOne.GetMarker()},\nplayer two: ${playerTwo.GetMarker()}`)
 
-    playerOne.OccupiePosition(1);
+    //mock game play, for testing purposes
+    /*playerOne.OccupiePosition(1);
     console.log(gameboardArr);
 
     playerTwo.OccupiePosition(2);
@@ -30,49 +32,93 @@ const Gameboard = (function(){
 
     playerOne.OccupiePosition(7);
     console.log(gameboardArr);
+    console.log(playerOne.GetInnerArray());
+    console.log(playerTwo.GetInnerArray()); */
 
     //GameFlow(playerOne,playerTwo);
-    let govenor = GameFlow(gameboardArr, playerOne, playerTwo);
+    let xgovenor = GameFlow(gameboardArr, playerOne);
+    let ogovenor = GameFlow(gameboardArr, playerTwo);
+    let gameOver = false;
+    let playerTurn = 'x';
+    for(let i= 0; i < 9; i++){
+        console.log(i);
+    
+        if(playerTurn == 'x' && gameOver == false){
+            let XTurn = playerOne.OccupiePosition(prompt('X turn\npick position from 0 - 9'));
+            if( XTurn != 0){
+                xgovenor.Checkwinner();
+                console.log(gameboardArr);
+
+                playerTurn ='o';
+
+            }
+            else{
+                i--
+                playerTurn = 'x';
+            }
+
+        }
+        else if(playerTurn == 'o'&& gameOver == false) {
+            let OTurn = playerTwo.OccupiePosition(prompt('O turn\npick position from 0 - 9'));
+            if( OTurn != 0){
+                ogovenor.Checkwinner();
+                console.log(gameboardArr);
+                playerTurn ='x';                
+            }
+            else{
+                i--
+                playerTurn = 'o';
+            }
+        }
+    }
+
     
 }());
-function GameFlow(gameArray, playerX, playerOne)
+function GameFlow(gameArray, player)
 {
     return{
         gameArray: gameArray,
         Checkwinner() {
-// corisponding index:= [1,2,3,4,5,6,7,8,9] this is index on a 3x3 grid starting from 1          
-    const winningArr = [[1,1,1,0,0,0,0,0,0], //1
-                        [0,0,0,1,1,1,0,0,0], //2
-                        [0,0,0,0,0,0,1,1,1], //3
-                        [1,0,0,1,0,0,1,0,0], //4
-                        [0,1,0,0,1,0,0,1,0], //5
-                        [0,0,1,0,0,1,0,0,1], //6
-                        [1,0,0,0,1,0,0,0,1], //7
-                        [0,0,1,0,1,0,1,0,0]];//8 possible winn positions           
-    //function for comparing the array with each winning position:
-    for(let i = 0; i < winningArr.length; i++){
+
+            //converts player array to a readable form
+            let playerArr = player.GetInnerArray();
+            for(let i = 0; i< playerArr.length; i++){
+                if(playerArr[i] == ""){
+                    playerArr.splice(i,1,0);
+                }
+                if(playerArr[i]== 'x' || playerArr[i] == 'o'){
+                    playerArr.splice(i,1,1);
+                }
+            }
+       // corisponding index:= [1,2,3,4,5,6,7,8,9] this is index on a 3x3 grid starting from 1 
+            const winningArr = [[1,1,1,0,0,0,0,0,0], //1
+                               [0,0,0,1,1,1,0,0,0], //2
+                               [0,0,0,0,0,0,1,1,1], //3
+                               [1,0,0,1,0,0,1,0,0], //4
+                               [0,1,0,0,1,0,0,1,0], //5
+                               [0,0,1,0,0,1,0,0,1], //6
+                               [1,0,0,0,1,0,0,0,1], //7
+                               [0,0,1,0,1,0,1,0,0]];//8 possible winn positions           
+       //function for comparing the array with each winning position:
+            for(let i = 0; i < winningArr.length; i++){
         //console.log(`winning position ${winningArr[i]}`);
-        let currentWinArr = winningArr[i].toString();
-        console.log(`sulotion:  ${currentWinArr} \ngameboard: ${gameArray}`)
-
-        if(currentWinArr === gameArray.toString()){
-            console.log(`we have a winner at position ${i} `);
-        }
-        else{
-            console.log(`no win here`);
-        }
-
-    }
-
+                var currentWinArr = winningArr[i].toString();
+                if(currentWinArr === playerArr.toString()){
+                    console.log(`we have a winner at position ${i} `);
+                    break;
+                }
+                else{
+                    console.log(`no win here`);
+                }
+                
+            }
+            console.log(`gameboard: ${playerArr}`)
         },
         IsATie (){
         }
         //turn taking function:
-        //is occupied:
     }
-    //return{Checkwinner, IsATie,}; 
-                        //PlayerTurn, 
-                        //IsOccupied};
+
 }
 //factory function for player creation takes gameboard array so it can interact with it
 function Player(gameboardArray){
@@ -92,20 +138,15 @@ function Player(gameboardArray){
 
         // takes a players position index and inputs marker to the coresponding position on the gameboard array
         OccupiePosition(positionChoice){
-            /*for(let i = 0; i < innerArray.length; i++){
-                if(innerArray[i] !== 0 || enemyPositions !== 0){
-                    gameboardArray.splice(positionChoice, 1, marker);
-                }
-                else{
-                    console.log("Action youre trying to make is not possible, This position is already occupied!")
-                }
-            }*/
-
-            if (gameboardArray[positionChoice] != "x" || gameboardArray[positionChoice] != "o"){
-            gameboardArray.splice(positionChoice, 1, marker);
+            
+            
+            if (gameboardArray[positionChoice] != "x" && gameboardArray[positionChoice] != "o"){
+                gameboardArray.splice(positionChoice, 1, marker);
+                innerArray.splice(positionChoice, 1, marker);
             }
             else{
                 console.log("Action youre trying to make is not possible, This position is already occupied!")
+                return 0;
             }
         }
     }
