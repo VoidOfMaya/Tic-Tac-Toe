@@ -1,0 +1,84 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Raleway', sans-serif;
+ 
+    list-style: none;
+}
+body {
+    height: 100vh;
+    background-color: rgb(189, 197, 238); 
+    display: grid;
+    grid-template: 1fr 4fr 1fr / 1fr 2fr 1fr;
+    grid-template-areas: "header header header"
+                         "left-side gameboard right-side"
+                         "footer footer footer"; 
+}
+.top_div{
+    grid-area: header;
+    display: flex;
+
+}
+#title{
+    color:rgb(114, 115, 116);
+    margin-top: 5%;
+    text-align: center;
+    text-emphasis: bold;
+}
+.left_div{
+    grid-area:left-side;
+}
+.gameboard {
+    display: grid;
+    grid-area: gameboard;
+    border-radius: 20px;
+    background-color: rgb(114, 115, 116);
+    grid-template: repeat(3 ,1fr)/ repeat(3, 1fr);
+    grid-template-areas: "0 1 2"
+                         "3 4 5"
+                         "6 7 8";
+    gap: 2px;
+                         
+}
+.right_div{
+    grid-area: right-side;
+}
+.bottom_div{
+    grid-area: footer;
+}
+.inner-gameboard{
+    background-color: rgb(189, 197, 238);
+
+}
+.inner-gameboard:hover{
+    background-color:rgb(206, 222, 236) ;
+}
+
+#0{
+    grid-area: 0;
+}
+#1{
+    grid-area: 1;
+}
+#2{
+    grid-area: 2;
+}
+#3{
+    grid-area: 3;
+}
+#4{
+    grid-area: 4;
+}
+#5{
+    grid-area: 5;
+}
+#6{
+    grid-area: 6;
+}
+#7{
+    grid-area: 7;
+}
+#8{
+    grid-area: 8;
+}
