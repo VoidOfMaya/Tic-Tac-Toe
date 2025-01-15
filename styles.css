@@ -82,3 +82,35 @@ body {
 #8{
     grid-area: 8;
 }
+
+#game_start{
+    margin: auto;
+    display:grid;
+    padding: 2%;
+    
+    border-radius: 7%;
+    grid-template:1fr 1fr/ 1fr 1f 2fr;
+    grid-template-areas: "dialogtitle dialogtitle"
+                         "text text"
+                         "x o";
+    gap:20px;
+}
+#dialog_title{
+    grid-area: dialogtitle;
+    margin-bottom: 10%;
+}
+#dialog_text{
+    grid-area: text;
+    margin-bottom: 10%;
+}
+#x_button{
+    grid-area: x;
+}
+#o_button{
+    grid-area: o;
+}
+.dialog_btn{
+    padding:40%;
+    border: none; 
+    border-radius: 20px; 
+}

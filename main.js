@@ -7,16 +7,29 @@ const Gameboard = (function(){
     let gameboardArr =  ["","","","","","","","",""];
 
     //creating players
-    const playerOne = Player(gameboardArr);
-    playerOne.Setmarker(prompt('choose your marker X or O'));
+    const dialogWin = document.querySelector("#game_start");
+    const selectXPlayerBtn = document.querySelector("#x_button");
+    const selectOPlayerBtn = document.querySelector("#o_button");
 
+    dialogWin.showModal();
+
+
+    
+    const playerOne = Player(gameboardArr);
     const playerTwo = Player(gameboardArr);
-    if(playerOne.GetMarker == 'x'){
-        playerTwo.Setmarker('o');        
-    }
-    else{
+    //playerOne.Setmarker(prompt('choose your marker X or O'));
+    selectXPlayerBtn.addEventListener('click',()=>{
+        playerOne.Setmarker('x');
+        playerTwo.Setmarker('o');
+        dialogWin.closeModal();
+        console.log('x has been choosen');
+    })
+    selectOPlayerBtn.addEventListener('click',()=>{
+        playerOne.Setmarker('o');
         playerTwo.Setmarker('x');
-    }
+        dialogWin.closeModal();
+        console.log('o has been choosen');
+    })
 
 
 
