@@ -84,9 +84,12 @@ body {
 }
 
 #game_start{
+    align-self: center;
     margin: auto;
     display:grid;
     padding: 2%;
+    border: none;
+
     
     border-radius: 7%;
     grid-template:1fr 1fr/ 1fr 1f 2fr;
@@ -110,7 +113,14 @@ body {
     grid-area: o;
 }
 .dialog_btn{
-    padding:40%;
+    padding:30%;
     border: none; 
     border-radius: 20px; 
+    background-color: white;
+    font-size: 42px;
+}
+
+.dialog_btn:hover {
+    background-color: #d3dde6;
+    color: rgb(235, 57, 57);
 }
