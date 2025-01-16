@@ -2,37 +2,45 @@ console.log("im working");
 
 //main gameboard
 const Gameboard = (function () {
-
+    
     // co-responding index:=[1,2,3,4,5,6,7,8,9] this is index on a 3x3 grid starting from 1
     let gameboardArr = ["", "", "", "", "", "", "", "", ""];
-
-    //creating players
-    const dialogWin = document.querySelector("#game_start");
-    const selectXPlayerBtn = document.querySelector("#x_button");
-    const selectOPlayerBtn = document.querySelector("#o_button");
-
-
-
-
     const playerOne = Player(gameboardArr);
     const playerTwo = Player(gameboardArr);
-    dialogWin.showModal();
+
+
+    //connects gameboard ui to output position choice
+    const innerGameboard = document.querySelector(".inner-gameboard");
+    innerGameboard.addEventListener('click', () => {
+        console.log(innerGameboard)
+    })
+
+
+    const dialog = document.getElementById("modal");
+    const selectXPlayerBtn = document.getElementById("x_button");
+    const selectOPlayerBtn = document.getElementById("o_button");
+
+
+    dialog.showModal();
     selectXPlayerBtn.addEventListener('click', () => {
 
         playerOne.Setmarker('x');
         playerTwo.Setmarker('o');
-        console.log(`marker has been choosen: ${playerOne.GetMarker()}`)
-        dialogWin.style.display = "none";
+        console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
+        dialog.close();
+        dialog.style.display = 'none';
 
     })
     selectOPlayerBtn.addEventListener('click', () => {
 
         playerOne.Setmarker('o');
         playerTwo.Setmarker('x');
-        console.log(`marker has been choosen: ${playerOne.GetMarker()}`)
-        dialogWin.style.display = "none";
+        console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
+        dialog.close();
+        dialog.style.display = 'none';
 
     })
+
 
     /*
        let xgovenor = GameFlow(playerOne);

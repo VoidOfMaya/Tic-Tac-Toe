@@ -6,7 +6,7 @@
  
     list-style: none;
 }
-body {
+.main-container{
     height: 100vh;
     background-color: rgb(189, 197, 238); 
     display: grid;
@@ -49,10 +49,11 @@ body {
 }
 .inner-gameboard{
     background-color: rgb(189, 197, 238);
-
+    border: none;
 }
 .inner-gameboard:hover{
     background-color:rgb(206, 222, 236) ;
+    
 }
 
 #0{
@@ -83,7 +84,7 @@ body {
     grid-area: 8;
 }
 
-#game_start{
+#modal{
     align-self: center;
     margin: auto;
     display:grid;

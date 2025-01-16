@@ -7,33 +7,34 @@
     <title>Document</title>
 </head>
 <body>
-    <div></div>
-    <div id="top_div"><h1 class="title">Tic Tac Toe </h1></div>
-    <div></div>
-    <div id="left_div"></div>
-    <div class="gameboard">
-        <div class="inner-gameboard" id="0"></div>
-        <div class="inner-gameboard" id="1"></div>
-        <div class="inner-gameboard" id="2"></div>
-        <div class="inner-gameboard" id="3"></div>
-        <div class="inner-gameboard" id="4"></div>
-        <div class="inner-gameboard" id="5"></div>
-        <div class="inner-gameboard" id="6"></div>
-        <div class="inner-gameboard" id="7"></div>
-        <div class="inner-gameboard" id="9"></div>
+    <div class="main-container">
+        <div></div>
+        <div id="top_div"><h1 class="title">Tic Tac Toe </h1></div>
+        <div></div>
+        <div id="left_div"></div>
+        <div class="gameboard">
+            <button class="inner-gameboard" id="0"></button>
+            <button class="inner-gameboard" id="1"></button>
+            <button class="inner-gameboard" id="2"></button>
+            <button class="inner-gameboard" id="3"></button>
+            <button class="inner-gameboard" id="4"></button>
+            <button class="inner-gameboard" id="5"></button>
+            <button class="inner-gameboard" id="6"></button>
+            <button class="inner-gameboard" id="7"></button>
+            <button class="inner-gameboard" id="9"></button>
+        </div>
+        <div id="right_div"></div>
+        <div></div>
+        <div id="bottom_div"></div>
+        <div></div>
     </div>
-    <div id="right_div"></div>
-    <div></div>
-    <div id="bottom_div"></div>
-    <div></div>
-    <dialog id="game_start">
+    <!--player choice register dialog window:--->
+    <dialog id="modal">
         <h1 id="dialog_title">Tic-Tac-Toe</h1>
-        <h2 id="dialog_text">Choose your player:</h2>
-        
+        <h2 id="dialog_text">Choose your player:</h2>     
         <button class="dialog_btn" id="x_button" type="button">x</button>
         <button class="dialog_btn" id="o_button" type="button">o</button>
         
-
     </dialog>
 
     
