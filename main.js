@@ -3,23 +3,30 @@ console.log("im working");
 //main gameboard
 const Gameboard = (function () {
     
-    // co-responding index:=[1,2,3,4,5,6,7,8,9] this is index on a 3x3 grid starting from 1
+    //instentiates display array and players
     let gameboardArr = ["", "", "", "", "", "", "", "", ""];
     const playerOne = Player(gameboardArr);
     const playerTwo = Player(gameboardArr);
 
 
-    //connects gameboard ui to output position choice
-    const innerGameboard = document.querySelector(".inner-gameboard");
-    innerGameboard.addEventListener('click', () => {
-        console.log(innerGameboard)
-    })
+    //mapping gameboard postions with corisponding index
 
+    let innerGameboard =[];
+    for(let i = 0; i < 9; i++){
+        innerGameboard.push(document.getElementById(`${i}`));
+    }
+    console.log(innerGameboard);
+    for(let i = 0; i < 9; i++){
+        innerGameboard[i].addEventListener('click',()=>{
+            console.log(`position: ${i}`);
+        })
+    }
+    
 
+    //handles modal and player selection;-
     const dialog = document.getElementById("modal");
     const selectXPlayerBtn = document.getElementById("x_button");
     const selectOPlayerBtn = document.getElementById("o_button");
-
 
     dialog.showModal();
     selectXPlayerBtn.addEventListener('click', () => {
