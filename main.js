@@ -27,10 +27,7 @@ const Gameboard = (function () {
                 return i;
             })
         }
-    }
-
-    position();
-  
+    }  
     //handles modal and player selection;-
     const dialog = document.getElementById("modal");
     const selectXPlayerBtn = document.getElementById("x_button");
@@ -56,12 +53,10 @@ const Gameboard = (function () {
 
     })
     // displayes position on gameboard array
-    function display(id){
-        id.innerText = 'X';
-
-
+    function display(id, playerMarker){
+        id.innerText = playerMarker;
     }
-/*
+
        let xgovenor = GameFlow(playerOne);
        let ogovenor = GameFlow(playerTwo);
        let playerTurn = playerOne.GetMarker();
@@ -84,7 +79,7 @@ const Gameboard = (function () {
                    playerTurn = 'x';
                }
            }
-*/
+        }
 }());
 function GameFlow(player) {
     return {
