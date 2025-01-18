@@ -1,62 +1,65 @@
 console.log("im working");
-
 //main gameboard
 const Gameboard = (function () {
     
-    
-    let gameboardArr = [];
+    //populates gameboard array with relevant dom object
+    let gameboardArr = ["","","","","","","","",""];
+    //gameboardArr.push(document.getElementById(`${i}`));
+    let elementArray = gameboardArr.map((id, index) => document.getElementById(index));
+    //creates players
     const playerOne = Player(gameboardArr);
     const playerTwo = Player(gameboardArr);
-    
 
-    //mapping gameboard postions with corisponding index
-    //const innerGameboard =[];
-    for(let i = 0; i < 9; i++){
-        gameboardArr.push(document.getElementById(`${i}`));
-
-    }
-    console.log(gameboardArr);
-
-    //choosing relevant click position
-    function position(){
-        for(let i = 0; i < 9; i++){
-
-            gameboardArr[i].addEventListener('click', ()=>{
-                console.log(i);
-                display(gameboardArr[i]);
-                return i;
-            })
-        }
-    }  
-    //handles modal and player selection;-
+    //mapping dom objects to variables for the dialog modal window:-
     const dialog = document.getElementById("modal");
     const selectXPlayerBtn = document.getElementById("x_button");
     const selectOPlayerBtn = document.getElementById("o_button");
 
-    dialog.showModal();
-    selectXPlayerBtn.addEventListener('click', () => {
-
-        playerOne.Setmarker('x');
-        playerTwo.Setmarker('o');
-        console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
-        dialog.close();
-        dialog.style.display = 'none';
-
-    })
-    selectOPlayerBtn.addEventListener('click', () => {
-
-        playerOne.Setmarker('o');
-        playerTwo.Setmarker('x');
-        console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
-        dialog.close();
-        dialog.style.display = 'none';
-
-    })
-    // displayes position on gameboard array
-    function display(id, playerMarker){
+    //displays player marker  on chosen segmant in gameboard
+    function Display(id, playerMarker){
         id.innerText = playerMarker;
     }
+    return{
+        playerOne,
+        playerTwo,
+        
+        //returns relevant dom object from gamebaord based on players click
+        Position(playermarker){
+            const element =elementArray;
+            for(let i = 0; i < 9; i++){
+                element[i].addEventListener('click', () => {
+                    //console.log(i);
+                    Display(element[i],playermarker.toString());
+                })
+                 
+            }
+        },
+        //triggers the player markes selection dialog modal
+        PlayerMarkerSelect(){
+            dialog.showModal();
+            selectXPlayerBtn.addEventListener('click', () => {
+            
+                playerOne.Setmarker('x');
+                playerTwo.Setmarker('o');
+                console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
+                dialog.close();
+                dialog.style.display = 'none';
+                return playerOne.GetMarker();
+            
+            })
+            selectOPlayerBtn.addEventListener('click', () => {
+            
+                playerOne.Setmarker('o');
+                playerTwo.Setmarker('x');
+                console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
+                dialog.close();
+                dialog.style.display = 'none';
+                return playerOne.GetMarker();
+            })
+        }
 
+    }
+/*
        let xgovenor = GameFlow(playerOne);
        let ogovenor = GameFlow(playerTwo);
        let playerTurn = playerOne.GetMarker();
@@ -79,11 +82,11 @@ const Gameboard = (function () {
                    playerTurn = 'x';
                }
            }
-        }
+        }*/
 }());
-function GameFlow(player) {
+const GameLogic = (function() {
     return {
-        //gameArray: gameArray,
+
         //converts player array to a readable form
         ReadArr(array) {
             let playerArr = array.GetInnerArray();
@@ -97,17 +100,17 @@ function GameFlow(player) {
             }
             return playerArr
         },
-        Checkwinner() {
+        Checkwinner(player) {
 
             const playerArr = this.ReadArr(player);
             const winningArr = [[1, 1, 1, 0, 0, 0, 0, 0, 0], //1
-            [0, 0, 0, 1, 1, 1, 0, 0, 0], //2
-            [0, 0, 0, 0, 0, 0, 1, 1, 1], //3
-            [1, 0, 0, 1, 0, 0, 1, 0, 0], //4
-            [0, 1, 0, 0, 1, 0, 0, 1, 0], //5
-            [0, 0, 1, 0, 0, 1, 0, 0, 1], //6
-            [1, 0, 0, 0, 1, 0, 0, 0, 1], //7
-            [0, 0, 1, 0, 1, 0, 1, 0, 0]];//8 possible winn positions 
+                                [0, 0, 0, 1, 1, 1, 0, 0, 0], //2
+                                [0, 0, 0, 0, 0, 0, 1, 1, 1], //3
+                                [1, 0, 0, 1, 0, 0, 1, 0, 0], //4
+                                [0, 1, 0, 0, 1, 0, 0, 1, 0], //5
+                                [0, 0, 1, 0, 0, 1, 0, 0, 1], //6
+                                [1, 0, 0, 0, 1, 0, 0, 0, 1], //7
+                                [0, 0, 1, 0, 1, 0, 1, 0, 0]];//8 possible winn positions 
 
             //function for comparing the array with each winning position:
             for (let i = 0; i < winningArr.length; i++) {
@@ -118,18 +121,31 @@ function GameFlow(player) {
                     return 1;
                 }
                 else {
-                    console.log(`no win here`);
+                    console.log(`no winner here`);
                 }
 
             }
             console.log(`gameboard: ${playerArr}`)
         },
-        IsATie() {
-        }
-        //turn taking function:
+        GameFlow (playerOne, playerTwo){
+            playerTurn = 0;
+            for(let i = 0; i < 9; i++){
+                if(playerTurn = 0){
+                    playerOne.OccupiePosition(Gameboard.Position(playerOne));
+                    this.Checkwinner(playerOne);
+                    playerTurn = 1;
+                }
+                if(playerTurn = 1){
+                    playerTwo.OccupiePosition(Gameboard.Position(playerTwo));
+                    this.Checkwinner(playerTwo);
+                    playerTurn = 0;                    
+                }
+            }
+        },
+
     }
 
-}
+}());
 //factory function for player creation takes gameboard array so it can interact with it
 function Player(gameboardArray) {
     let marker = 'none';
@@ -146,7 +162,6 @@ function Player(gameboardArray) {
         GetInnerArray() {
             return innerArray
         },
-
         // takes a players position index and inputs marker to the coresponding position on the gameboard array
         OccupiePosition(positionChoice) {
 
@@ -162,11 +177,11 @@ function Player(gameboardArray) {
         }
     }
 }
-
-//return{ Setmarker, 
-//        DisplayMarker,
-// OccupiePosition,}
-
-
-//console.log(Gameboard);
-//Checkwinner(gameboardArr);
+//GAME START
+const Game = function(playerOne, PlayerTwo){
+    playerOne = Gameboard.playerOne;
+    playerTwo = Gameboard.playerTwo;
+    Gameboard.PlayerMarkerSelect(); 
+    GameLogic.GameFlow(playerOne, playerTwo);
+}
+Game();
