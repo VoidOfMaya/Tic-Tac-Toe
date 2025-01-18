@@ -3,26 +3,34 @@ console.log("im working");
 //main gameboard
 const Gameboard = (function () {
     
-    //instentiates display array and players
-    let gameboardArr = ["", "", "", "", "", "", "", "", ""];
+    
+    let gameboardArr = [];
     const playerOne = Player(gameboardArr);
     const playerTwo = Player(gameboardArr);
-
-
-    //mapping gameboard postions with corisponding index
-
-    let innerGameboard =[];
-    for(let i = 0; i < 9; i++){
-        innerGameboard.push(document.getElementById(`${i}`));
-    }
-    console.log(innerGameboard);
-    for(let i = 0; i < 9; i++){
-        innerGameboard[i].addEventListener('click',()=>{
-            console.log(`position: ${i}`);
-        })
-    }
     
 
+    //mapping gameboard postions with corisponding index
+    //const innerGameboard =[];
+    for(let i = 0; i < 9; i++){
+        gameboardArr.push(document.getElementById(`${i}`));
+
+    }
+    console.log(gameboardArr);
+
+    //choosing relevant click position
+    function position(){
+        for(let i = 0; i < 9; i++){
+
+            gameboardArr[i].addEventListener('click', ()=>{
+                console.log(i);
+                display(gameboardArr[i]);
+                return i;
+            })
+        }
+    }
+
+    position();
+  
     //handles modal and player selection;-
     const dialog = document.getElementById("modal");
     const selectXPlayerBtn = document.getElementById("x_button");
@@ -47,18 +55,22 @@ const Gameboard = (function () {
         dialog.style.display = 'none';
 
     })
+    // displayes position on gameboard array
+    function display(id){
+        id.innerText = 'X';
 
 
-    /*
+    }
+/*
        let xgovenor = GameFlow(playerOne);
        let ogovenor = GameFlow(playerTwo);
        let playerTurn = playerOne.GetMarker();
-   
+  
       for(let i= 0; i < 9; i++){
            console.log(i);
            let win = 0;
            if(playerTurn == 'x'){
-               let XTurn = playerOne.OccupiePosition();
+               let XTurn = playerOne.OccupiePosition(choice());
                if( XTurn != 0){
                    win = xgovenor.Checkwinner();
                    console.log(gameboardArr);
@@ -72,27 +84,7 @@ const Gameboard = (function () {
                    playerTurn = 'x';
                }
            }
-           else if(playerTurn == 'o') {
-               let OTurn = playerTwo.OccupiePosition();
-               if( OTurn != 0){
-                   win = ogovenor.Checkwinner();
-                   console.log(gameboardArr);
-                   playerTurn ='x';
-                   if ( win == 1){
-                       break;
-                   }                             
-               }
-               else{
-                   i--
-                   playerTurn = 'o';
-               }
-           }
-           if(i = 8 && win != 1){
-               console.log('no winner here, good luck next time');
-           }
-       }
-   */
-
+*/
 }());
 function GameFlow(player) {
     return {

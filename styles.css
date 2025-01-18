@@ -125,3 +125,6 @@
     background-color: #d3dde6;
     color: rgb(235, 57, 57);
 }
+.dialog_btn:active{
+    background-color: #ffffff;
+}
