@@ -14,11 +14,12 @@ const Gameboard = (function () {
     for(let i = 0; i < 9; i++){
         gameboardArr.push(document.getElementById(`${i}`));
 
+
     }
     console.log(gameboardArr);
 
     //choosing relevant click position
-    function position(){
+    function displayBoard(){
         for(let i = 0; i < 9; i++){
 
             gameboardArr[i].addEventListener('click', ()=>{
@@ -33,53 +34,28 @@ const Gameboard = (function () {
     const selectXPlayerBtn = document.getElementById("x_button");
     const selectOPlayerBtn = document.getElementById("o_button");
 
-    dialog.showModal();
-    selectXPlayerBtn.addEventListener('click', () => {
 
-        playerOne.Setmarker('x');
-        playerTwo.Setmarker('o');
-        console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
-        dialog.close();
-        dialog.style.display = 'none';
+    return{
+    selectPlayer(){
+        dialog.showModal();
+        selectXPlayerBtn.addEventListener('click', () => {
+            playerOne.Setmarker('x');
+            playerTwo.Setmarker('o');
+            console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
+            dialog.close();
+            dialog.style.display = 'none';
 
-    })
-    selectOPlayerBtn.addEventListener('click', () => {
+        })
+        selectOPlayerBtn.addEventListener('click', () => {
+            playerOne.Setmarker('o');
+            playerTwo.Setmarker('x');
+            console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
+            dialog.close();
+            dialog.style.display = 'none';
 
-        playerOne.Setmarker('o');
-        playerTwo.Setmarker('x');
-        console.log(`marker has been choosen: ${playerOne.GetMarker()}`);
-        dialog.close();
-        dialog.style.display = 'none';
-
-    })
-    // displayes position on gameboard array
-    function display(id, playerMarker){
-        id.innerText = playerMarker;
+        })
+    },
     }
-
-       let xgovenor = GameFlow(playerOne);
-       let ogovenor = GameFlow(playerTwo);
-       let playerTurn = playerOne.GetMarker();
-  
-      for(let i= 0; i < 9; i++){
-           console.log(i);
-           let win = 0;
-           if(playerTurn == 'x'){
-               let XTurn = playerOne.OccupiePosition(choice());
-               if( XTurn != 0){
-                   win = xgovenor.Checkwinner();
-                   console.log(gameboardArr);
-                   playerTurn ='o';
-                   if ( win == 1){
-                       break;
-                   }
-               }
-               else{
-                   i--
-                   playerTurn = 'x';
-               }
-           }
-        }
 }());
 function GameFlow(player) {
     return {
@@ -163,6 +139,9 @@ function Player(gameboardArray) {
     }
 }
 
+const Game = ()=>{
+    Gameboard.selectPlayer();
+}
 //return{ Setmarker, 
 //        DisplayMarker,
 // OccupiePosition,}
