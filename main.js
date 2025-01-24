@@ -1,24 +1,27 @@
 console.log("im working");
 //main gameboard
 const Gameboard = (function () {
-    //populates gameboard array with relevant dom object
+
     let board = ["", "", "", "", "", "", "", "", ""];
-    //player turn boverner 
-    //gameboardArr.push(document.getElementById(`${i}`));
+ 
+    //links gameboard array with relevant dom 
     let elementArray = board.map((id, index) => document.getElementById(index));
+
     //creates players
     const playerOne = Player(board);
     const playerTwo = Player(board);
-    //mapping dom objects to variables for the dialog modal window:-
-    const dialog = document.getElementById("modal");
-    const selectXPlayerBtn = document.getElementById("x_button");
-    const selectOPlayerBtn = document.getElementById("o_button");
+
     return {
         board,
         playerOne,
         playerTwo,
         //triggers the player markes selection dialog modal
         PlayerMarkerSelect() {
+            //mapping dom objects to variables for the dialog modal window:-
+            const dialog = document.getElementById("modal");
+            const selectXPlayerBtn = document.getElementById("x_button");
+            const selectOPlayerBtn = document.getElementById("o_button");
+
             let turn ='';
             dialog.showModal();
             selectXPlayerBtn.addEventListener('click', () => {
@@ -28,7 +31,7 @@ const Gameboard = (function () {
                 dialog.close();
                 dialog.style.display = 'none';    
                 console.log(`marker has been set to: ${playerOne.GetMarker()}`);
-                turn = playerOne.GetMarker();      
+                callBack(turn);     
             })
             selectOPlayerBtn.addEventListener('click', () => {
 
@@ -36,37 +39,78 @@ const Gameboard = (function () {
                 playerTwo.Setmarker('x');
                 dialog.close();
                 dialog.style.display = 'none';
-                console.log(`marker has been set to: ${playerTwo.GetMarker()}`);  
-                turn = playerTwo.GetMarker();    
+                console.log(`marker has been set to: ${playerOne.GetMarker()}`);  
+                callBack(turn);    
             })
-            return turn;
+            callBack = ()=>{
+                turn = playerOne.GetMarker();
+                console.log(`returning value should be ${playerOne.GetMarker()} and the other player is ${playerTwo.GetMarker()}`)
+                return turn
+            }
+            
         },
+        //populates the display gameboard array and displays it
         populate(index, playerMark){
             if(elementArray[index].textContent ===""){
                 elementArray[index].textContent = playerMark;
+                console.log(elementArray[index].textContent);
+            }
+            else{
+                console.log('this position is already occupied');
             }
         }
     }
 }());
 function GameFlow (gameboard, playerA, playerB){
-let turn = gameboard.PlayerMarkerSelect();
+
+gameboard.PlayerMarkerSelect();
 const displayBoard =gameboard.board.map((id, index) => document.getElementById(index));
 
-return{
-    startGame(){
-        console.log(displayBoard);
+//function that handles triggiring all actions required for a single turn
+function turn(player){
         displayBoard.map((cell, index)=> {
-            console.log(cell);
             cell.addEventListener('click', ()=>{
-                console.log(`addressing button no,: ${index}\ninternal element: ${cell}`)
-                gameboard.populate(index, playerA.GetMarker())
-                playerA.OccupiePosition(index);
-                console.log('current players internal array ' +playerA.GetArray());
-                playerA.Checkwinner();
+                //console.log(`addressing button no,: ${index}\ninternal element: ${cell}`) 
+                player.OccupiePosition(index);
+                gameboard.populate(index, player.GetMarker())
+                console.log('current players internal array ' +player.GetArray());
+                player.Checkwinner();
                 
             })
         });
+}
+return{
+    //manages each turn between each okayer object.
+    turnManager(){
+
+        let timesPressed = 0;
+        const buttonPress =document.querySelectorAll(".inner-gameboard")
+        buttonPress.forEach((btn, index) =>{
+                      
+            btn.addEventListener('click', ()=>{
+                console.log(index);               
+                console.log(`button press detected\ntotal times pressed: ${timesPressed}`);
+                if( timesPressed%2 === 0){
+                    console.log(`carryout function A`);
+                    turn(playerA);
+                }
+                if( timesPressed%2 === 1){
+                    console.log(`carryout function b`);
+                    turn(playerB);
+                }
+                
+                timesPressed = timesPressed + 1;
+                //console.log(`game in progress at round: ${turnProgress}`)
+                    
+            })                
+        
+            
+        })
+
+        
+
     },
+    
 }
 }
 //factory function for player creation takes gameboard array so it can interact with it
@@ -145,7 +189,6 @@ function Player(gameboardArray) {
 //GAME START
 const Game = function (gameflow, board) {
     const newGame = gameflow(board, board.playerOne, board.playerTwo);
-    newGame.startGame();
-
+    newGame.turnManager();
 }
 Game(GameFlow, Gameboard);

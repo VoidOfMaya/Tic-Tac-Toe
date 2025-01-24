@@ -50,6 +50,8 @@
 .inner-gameboard{
     background-color: rgb(189, 197, 238);
     border: none;
+    font-size: 68px;
+    font-weight: bolder;
 }
 .inner-gameboard:hover{
     background-color:rgb(206, 222, 236) ;
