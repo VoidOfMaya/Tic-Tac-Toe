@@ -90,26 +90,6 @@ const GameFlow = (function (){
                         } else {
                             currentPlayer = Gameboard.playerOne;
                         }
-                    /*console.log(index);               
-                        if(currentPlayer.GetMarker() === 'x' ){
-                            console.log(`carryout function A`);
-                            currentPlayer.OccupiePosition(index);
-                            Gameboard.populate(index, currentPlayer.GetMarker())
-                            currentPlayer.Checkwinner();
-                            console.log('current players internal array ' +currentPlayer.GetArray());
-                            if (currentPlayer.GetMarker() === 'x') {
-                                currentPlayer = Gameboard.playerOne;
-                            } else {
-                                currentPlayer = Gameboard.playerTwo;
-                            } 
-                        }
-                        if(currentPlayer.GetMarker() === 'o'){
-                            console.log(`carryout function b`);
-                            currentPlayer.OccupiePosition(index);
-                            Gameboard.populate(index, currentPlayer.GetMarker())
-                            currentPlayer.Checkwinner();   
-                            console.log('current players internal array ' +currentPlayer.GetArray());
-                        }*/
                         
                     }
                     else{
@@ -168,6 +148,18 @@ function Player(gameboardArray) {
             }
         },
         Checkwinner() {
+                               //0, 1, 2, 3, 4, 5, 6, 7, 8
+
+            // this is the index winning combinations
+            /*const winningCombos=[[0, 1, 2],
+                                 [3, 4, 5],
+                                 [6, 7, 8],
+                                 [0, 3, 6],
+                                 [1, 4, 7],
+                                 [2, 5, 8],
+                                 [0, 4, 8],
+                                 [2, 4, 6]]*/
+                                
             const winningArr = [[1, 1, 1, 0, 0, 0, 0, 0, 0], //1
                                 [0, 0, 0, 1, 1, 1, 0, 0, 0], //2
                                 [0, 0, 0, 0, 0, 0, 1, 1, 1], //3
@@ -176,11 +168,38 @@ function Player(gameboardArray) {
                                 [0, 0, 1, 0, 0, 1, 0, 0, 1], //6
                                 [1, 0, 0, 0, 1, 0, 0, 0, 1], //7
                                 [0, 0, 1, 0, 1, 0, 1, 0, 0]];//8 possible winn positions 
-
+            
             //converts array to a readable format
             let boardArray = readArray(innerArray);
             //function for comparing the array with each winning position:
+            let matchesFound = 0;           
             for(let i = 0; i < winningArr.length; i++){
+
+                for(let z = 0; z < winningArr[i].length; z++){
+
+                    if(winningArr[i][z] === 1 && boardArray[z] === 1){
+                        matchesFound = matchesFound + 1 ;
+                    }
+                    else{
+                        continue;
+                    }
+                    
+                }
+                
+                if(matchesFound === 3){
+
+                    console.log(`we have a winner`)
+                    break;
+                }
+                else{
+                    console.log(`no matches where found ,next combo`)
+                    matchesFound = 0 ;
+                }
+            }
+            //console.log(matchesFound);
+            //console.log(matchedArray);
+            
+            /*for(let i = 0; i < winningArr.length; i++){
                 if (winningArr[i].toString() === innerArray.toString()) {
                     console.log(`we have a winner `);
                     break;
@@ -188,8 +207,8 @@ function Player(gameboardArray) {
                 else {
                     console.log(`no winner here`);
                 }               
-            }
-            console.log(boardArray);
+            }*/
+            //console.log(boardArray);
 
         }
     }
