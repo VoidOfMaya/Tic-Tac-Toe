@@ -16,13 +16,14 @@ const Gameboard = (function () {
         playerOne,
         playerTwo,
         //triggers the player markes selection dialog modal
-        PlayerMarkerSelect() {
+        PlayerMarkerSelect(gameFlow) {
             //mapping dom objects to variables for the dialog modal window:-
             const dialog = document.getElementById("modal");
             const selectXPlayerBtn = document.getElementById("x_button");
             const selectOPlayerBtn = document.getElementById("o_button");
-
             let turn ='';
+            
+
             dialog.showModal();
             selectXPlayerBtn.addEventListener('click', () => {
 
@@ -30,8 +31,8 @@ const Gameboard = (function () {
                 playerTwo.Setmarker('o');
                 dialog.close();
                 dialog.style.display = 'none';    
-                console.log(`marker has been set to: ${playerOne.GetMarker()}`);
-                callBack(turn);     
+                console.log(`marker has been set to: ${playerOne.GetMarker()}`);    
+                gameFlow.turnManager(playerOne);
             })
             selectOPlayerBtn.addEventListener('click', () => {
 
@@ -39,14 +40,9 @@ const Gameboard = (function () {
                 playerTwo.Setmarker('x');
                 dialog.close();
                 dialog.style.display = 'none';
-                console.log(`marker has been set to: ${playerOne.GetMarker()}`);  
-                callBack(turn);    
+                console.log(`marker has been set to: ${playerOne.GetMarker()}`);      
+                gameFlow.turnManager(playerOne);
             })
-            callBack = ()=>{
-                turn = playerOne.GetMarker();
-                console.log(`returning value should be ${playerOne.GetMarker()} and the other player is ${playerTwo.GetMarker()}`)
-                return turn
-            }
             
         },
         //populates the display gameboard array and displays it
@@ -61,58 +57,70 @@ const Gameboard = (function () {
         }
     }
 }());
-function GameFlow (gameboard, playerA, playerB){
+const GameFlow = (function (){
 
-gameboard.PlayerMarkerSelect();
-const displayBoard =gameboard.board.map((id, index) => document.getElementById(index));
-
-//function that handles triggiring all actions required for a single turn
-function turn(player){
+    const displayBoard =Gameboard.board.map((id, index) => document.getElementById(index));
+    let currentPlayer;
+    //function that handles triggiring all actions required for a single turn
+    function turn(player){
         displayBoard.map((cell, index)=> {
             cell.addEventListener('click', ()=>{
                 //console.log(`addressing button no,: ${index}\ninternal element: ${cell}`) 
                 player.OccupiePosition(index);
-                gameboard.populate(index, player.GetMarker())
+                Gameboard.populate(index, player.GetMarker())
                 console.log('current players internal array ' +player.GetArray());
                 player.Checkwinner();
                 
             })
         });
-}
-return{
-    //manages each turn between each okayer object.
-    turnManager(){
-
-        let timesPressed = 0;
-        const buttonPress =document.querySelectorAll(".inner-gameboard")
-        buttonPress.forEach((btn, index) =>{
-                      
-            btn.addEventListener('click', ()=>{
-                console.log(index);               
-                console.log(`button press detected\ntotal times pressed: ${timesPressed}`);
-                if( timesPressed%2 === 0){
-                    console.log(`carryout function A`);
-                    turn(playerA);
-                }
-                if( timesPressed%2 === 1){
-                    console.log(`carryout function b`);
-                    turn(playerB);
-                }
-                
-                timesPressed = timesPressed + 1;
-                //console.log(`game in progress at round: ${turnProgress}`)
-                    
-            })                
-        
-            
-        })
-
-        
-
-    },
-    
-}
-}
+    }
+    return{
+        //manages each turn between each okayer object.
+        turnManager(startingPlayer){
+            const buttonPress =document.querySelectorAll(".inner-gameboard")
+            buttonPress.forEach((btn, index) =>{
+                currentPlayer = startingPlayer;          
+                btn.addEventListener('click', ()=>{
+                    if( Gameboard.board[index] === '' ){
+                        currentPlayer.OccupiePosition(index);
+                        Gameboard.populate(index, currentPlayer.GetMarker())
+                        currentPlayer.Checkwinner();
+                        if (currentPlayer.GetMarker() === startingPlayer.GetMarker()) {
+                            currentPlayer = Gameboard.playerTwo;
+                        } else {
+                            currentPlayer = Gameboard.playerOne;
+                        }
+                    /*console.log(index);               
+                        if(currentPlayer.GetMarker() === 'x' ){
+                            console.log(`carryout function A`);
+                            currentPlayer.OccupiePosition(index);
+                            Gameboard.populate(index, currentPlayer.GetMarker())
+                            currentPlayer.Checkwinner();
+                            console.log('current players internal array ' +currentPlayer.GetArray());
+                            if (currentPlayer.GetMarker() === 'x') {
+                                currentPlayer = Gameboard.playerOne;
+                            } else {
+                                currentPlayer = Gameboard.playerTwo;
+                            } 
+                        }
+                        if(currentPlayer.GetMarker() === 'o'){
+                            console.log(`carryout function b`);
+                            currentPlayer.OccupiePosition(index);
+                            Gameboard.populate(index, currentPlayer.GetMarker())
+                            currentPlayer.Checkwinner();   
+                            console.log('current players internal array ' +currentPlayer.GetArray());
+                        }*/
+                        
+                    }
+                    else{
+                        console.log('this position is already occupied!')
+                        console.log(`the possition your trying to occupie is: ${Gameboard.board}`)
+                    }     
+                });
+            });                   
+        },
+    };
+})();
 //factory function for player creation takes gameboard array so it can interact with it
 function Player(gameboardArray) {
     let marker = 'none';
@@ -161,19 +169,19 @@ function Player(gameboardArray) {
         },
         Checkwinner() {
             const winningArr = [[1, 1, 1, 0, 0, 0, 0, 0, 0], //1
-            [0, 0, 0, 1, 1, 1, 0, 0, 0], //2
-            [0, 0, 0, 0, 0, 0, 1, 1, 1], //3
-            [1, 0, 0, 1, 0, 0, 1, 0, 0], //4
-            [0, 1, 0, 0, 1, 0, 0, 1, 0], //5
-            [0, 0, 1, 0, 0, 1, 0, 0, 1], //6
-            [1, 0, 0, 0, 1, 0, 0, 0, 1], //7
-            [0, 0, 1, 0, 1, 0, 1, 0, 0]];//8 possible winn positions 
+                                [0, 0, 0, 1, 1, 1, 0, 0, 0], //2
+                                [0, 0, 0, 0, 0, 0, 1, 1, 1], //3
+                                [1, 0, 0, 1, 0, 0, 1, 0, 0], //4
+                                [0, 1, 0, 0, 1, 0, 0, 1, 0], //5
+                                [0, 0, 1, 0, 0, 1, 0, 0, 1], //6
+                                [1, 0, 0, 0, 1, 0, 0, 0, 1], //7
+                                [0, 0, 1, 0, 1, 0, 1, 0, 0]];//8 possible winn positions 
 
             //converts array to a readable format
-            let boardArray = readArray(gameboardArray);
+            let boardArray = readArray(innerArray);
             //function for comparing the array with each winning position:
             for(let i = 0; i < winningArr.length; i++){
-                if (winningArr[i].toString() === boardArray.toString()) {
+                if (winningArr[i].toString() === innerArray.toString()) {
                     console.log(`we have a winner `);
                     break;
                 }
@@ -187,8 +195,7 @@ function Player(gameboardArray) {
     }
 }
 //GAME START
-const Game = function (gameflow, board) {
-    const newGame = gameflow(board, board.playerOne, board.playerTwo);
-    newGame.turnManager();
+const Game = function (gameBoard,gameFlow) {
+    gameBoard.PlayerMarkerSelect(gameFlow);
 }
-Game(GameFlow, Gameboard);
+Game(Gameboard, GameFlow);
