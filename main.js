@@ -149,17 +149,6 @@ function Player(gameboardArray) {
         },
         Checkwinner() {
                                //0, 1, 2, 3, 4, 5, 6, 7, 8
-
-            // this is the index winning combinations
-            /*const winningCombos=[[0, 1, 2],
-                                 [3, 4, 5],
-                                 [6, 7, 8],
-                                 [0, 3, 6],
-                                 [1, 4, 7],
-                                 [2, 5, 8],
-                                 [0, 4, 8],
-                                 [2, 4, 6]]*/
-                                
             const winningArr = [[1, 1, 1, 0, 0, 0, 0, 0, 0], //1
                                 [0, 0, 0, 1, 1, 1, 0, 0, 0], //2
                                 [0, 0, 0, 0, 0, 0, 1, 1, 1], //3
@@ -172,44 +161,30 @@ function Player(gameboardArray) {
             //converts array to a readable format
             let boardArray = readArray(innerArray);
             //function for comparing the array with each winning position:
-            let matchesFound = 0;           
+            let matchesFound = 0; 
+            let winnerStatus = false;
+            //making i adressable outside of the forloop          
             for(let i = 0; i < winningArr.length; i++){
-
                 for(let z = 0; z < winningArr[i].length; z++){
-
                     if(winningArr[i][z] === 1 && boardArray[z] === 1){
                         matchesFound = matchesFound + 1 ;
                     }
                     else{
                         continue;
-                    }
-                    
+                    }   
                 }
-                
+                //checks if there is a win
                 if(matchesFound === 3){
-
                     console.log(`we have a winner`)
+                    winnerStatus = true;
                     break;
                 }
                 else{
                     console.log(`no matches where found ,next combo`)
                     matchesFound = 0 ;
                 }
-            }
-            //console.log(matchesFound);
-            //console.log(matchedArray);
-            
-            /*for(let i = 0; i < winningArr.length; i++){
-                if (winningArr[i].toString() === innerArray.toString()) {
-                    console.log(`we have a winner `);
-                    break;
-                }
-                else {
-                    console.log(`no winner here`);
-                }               
-            }*/
-            //console.log(boardArray);
 
+            }
         }
     }
 }
