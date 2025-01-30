@@ -8,10 +8,13 @@
 </head>
 <body>
     <div class="main-container">
-        <div></div>
-        <div id="top_div"><h1 class="title">Tic Tac Toe </h1></div>
-        <div></div>
-        <div id="left_div"></div>
+        <div class="header"></div>
+        <div class="header" id="top_div"><h1 class="title">Tic Tac Toe </h1></div>
+        <div class="header"></div>
+        <div class="side_bars" id="left_div">
+            <div class="side_item" >"X" Player</div>
+            <div class="side_item" id="xWins">0</div>
+        </div>
         <div class="gameboard">
             <button class="inner-gameboard" id="0" type="button"></button>
             <button class="inner-gameboard" id="1" type="button"></button>
@@ -23,7 +26,10 @@
             <button class="inner-gameboard" id="7" type="button"></button>
             <button class="inner-gameboard" id="8" type="button"></button>
         </div>
-        <div id="right_div"></div>
+        <div class="side_bars" id="right_div">
+            <div class="side_item"> "O" Player</div>
+            <div class="side_item" id="oWins">0</div>
+        </div>
         <div></div>
         <div id="bottom_div"></div>
         <div></div>
@@ -34,8 +40,8 @@
         <h2 id="dialog_text">Choose your player:</h2>     
         <button class="dialog_btn" id="x_button" type="button">x</button>
         <button class="dialog_btn" id="o_button" type="button">o</button>
-        
     </dialog>
+    <!--end game popo up decleration -->
 
     
 </body>
