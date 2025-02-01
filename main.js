@@ -258,10 +258,56 @@ function Player(gameboardArray) {
                 innerArray[positionChoice] = marker;
             }
         },
+<<<<<<< HEAD
         clearPlayer() {
+=======
+<<<<<<< HEAD
+        clearPlayer(){
+>>>>>>> 254785fd11cd8c73ac9fd23c67a5b35ef69e48c9
             innerArray.fill("");
         },
 
+=======
+        Checkwinner() {
+                               //0, 1, 2, 3, 4, 5, 6, 7, 8
+            const winningArr = [[1, 1, 1, 0, 0, 0, 0, 0, 0], //1
+                                [0, 0, 0, 1, 1, 1, 0, 0, 0], //2
+                                [0, 0, 0, 0, 0, 0, 1, 1, 1], //3
+                                [1, 0, 0, 1, 0, 0, 1, 0, 0], //4
+                                [0, 1, 0, 0, 1, 0, 0, 1, 0], //5
+                                [0, 0, 1, 0, 0, 1, 0, 0, 1], //6
+                                [1, 0, 0, 0, 1, 0, 0, 0, 1], //7
+                                [0, 0, 1, 0, 1, 0, 1, 0, 0]];//8 possible winn positions 
+            
+            //converts array to a readable format
+            let boardArray = readArray(innerArray);
+            //function for comparing the array with each winning position:
+            let matchesFound = 0; 
+            let winnerStatus = false;
+            //making i adressable outside of the forloop          
+            for(let i = 0; i < winningArr.length; i++){
+                for(let z = 0; z < winningArr[i].length; z++){
+                    if(winningArr[i][z] === 1 && boardArray[z] === 1){
+                        matchesFound = matchesFound + 1 ;
+                    }
+                    else{
+                        continue;
+                    }   
+                }
+                //checks if there is a win
+                if(matchesFound === 3){
+                    console.log(`we have a winner`)
+                    winnerStatus = true;
+                    break;
+                }
+                else{
+                    console.log(`no matches where found ,next combo`)
+                    matchesFound = 0 ;
+                }
+
+            }
+        }
+>>>>>>> e8922cada24259a5c1922328dd1575c1d1883b9a
     }
 }
 //GAME START
