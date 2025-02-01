@@ -166,7 +166,7 @@ const GameFlow = (function () {
     function turnManager(startingPlayer) {
         currentPlayer = startingPlayer;
 
-        
+        removeEventListeners()
 
         const buttonPress = document.querySelectorAll(".inner-gameboard");
         //const handleClick =(index)=>{return ()=> clickHandler(index)};
@@ -177,15 +177,7 @@ const GameFlow = (function () {
                 
         })
 
-        if(hasWin){
-            removeEventListeners()
-        }
     }
-
-       // buttonPress.forEach((btn, index) => {
-       //     btn.addEventListener('click',clickHandler(index));
-       // 
-        //});
     function clickHandler(index) {
         console.log(`clicked${index}`);
         if (Gameboard.board[index] === '') {
