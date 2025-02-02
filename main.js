@@ -26,8 +26,6 @@ const Gameboard = (function () {
         board,
         playerOne,
         playerTwo,
-        xCounter,
-        oCounter,
         //triggers the player markes selection dialog modal
         PlayerMarkerSelect(gameFlow) {
             //mapping dom objects to variables for the dialog modal window:-
@@ -44,7 +42,7 @@ const Gameboard = (function () {
                 dialog.close();
                 dialog.style.display = 'none';
                 console.log(`marker has been set to: ${playerOne.GetMarker()}`);
-                gameFlow.turnManager(playerOne);
+                gameFlow.eventHandler(playerOne);
             })
             selectOPlayerBtn.addEventListener('click', () => {
 
@@ -53,17 +51,15 @@ const Gameboard = (function () {
                 dialog.close();
                 dialog.style.display = 'none';
                 console.log(`marker has been set to: ${playerOne.GetMarker()}`);
-                gameFlow.turnManager(playerOne);
+                gameFlow.eventHandler(playerOne);
             })
 
         },
         //populates the display gameboard array and displays it
         populate(index, playerMark) {
-            console.log(`Populating cell ${index} with marker ${playerMark}`);
             if (elementArray[index].textContent === "") {
                 elementArray[index].textContent = playerMark;
                 board[index] = playerMark;
-                //console.log(elementArray[index].textContent);
             }
 
             else {
@@ -81,35 +77,24 @@ const Gameboard = (function () {
                 oWin.innerHTML = oCounter;
             }
         },
-        getXScore() {
-            return xCounter
-        },
-        getOScore() {
-            return oCounter
-        },
+        //resets gameboard and player elements within gameboard
         clearGame() {
             board.fill("");
             elementArray = board.map((id, index) => document.getElementById(index));
             elementArray.forEach(element => {
                 element.textContent = "";
             })
-
-
             playerOne.clearPlayer();
             playerTwo.clearPlayer();
-
             console.log(`GAME OVER/RESET`)
-            //console.log(`display array:${elementArray[0]}\nboard array: ${board}\nplayer pne array: ${playerOne.GetArray()}\nplayer two array: ${playerTwo.GetArray()}`)
-
-            //GameFlow.turnManager(Gameboard.playerOne);        
+            
         }
     }
 }());
 const GameFlow = (function () {
 
     let currentPlayer;
-    let hasWin = false;
-    let eventsCounted = 0;
+    let movesCounted = 0;
 
     //converts each array from blank space to a 0 and player marker to a 1 at index
     const readArray = (array) => {
@@ -123,6 +108,7 @@ const GameFlow = (function () {
         })
         return array;
     }
+    //compares the players array with an array of winning arrays returning back true if a win is detected
     function Checkwinner(player) {
         //0, 1, 2, 3, 4, 5, 6, 7, 8         
         const winningArr = [[1, 1, 1, 0, 0, 0, 0, 0, 0], //1
@@ -134,8 +120,8 @@ const GameFlow = (function () {
         [1, 0, 0, 0, 1, 0, 0, 0, 1], //7
         [0, 0, 1, 0, 1, 0, 1, 0, 0]];//8 possible winn positions 
 
-        //converts array to a readable format
         let boardArray = readArray(player.GetArray());
+
         //function for comparing the array with each winning position:
         let matchesFound = 0;
         for (let i = 0; i < winningArr.length; i++) {
@@ -148,80 +134,69 @@ const GameFlow = (function () {
                 }
             }
             if (matchesFound === 3) {
-                hasWin = true;
-                return hasWin;
+                return true;
             }
-            console.log(`no matches where found ,next combo`)
-            //console.log(`${currentPlayer.GetMarker()}PLAYER =>match found count: ${matchesFound}`);  
+            console.log(`no win detected!`)
         }
 
     }
+    //resets the gameboard  and calls eventHandler function to start new round
     function startNextRound() {
         Gameboard.clearGame();
         currentPlayer = Gameboard.playerOne;
         console.log(`NEW ROUND STARTS!`);
-        turnManager(currentPlayer);
+        eventHandler(currentPlayer);
 
     }
-    function turnManager(startingPlayer) {
+    //asignes  eventlisteners to the board array and invoking  game functionality on click
+    function eventHandler(startingPlayer) {
+          
         currentPlayer = startingPlayer;
-
-        removeEventListeners()
-
-        const buttonPress = document.querySelectorAll(".inner-gameboard");
-        //const handleClick =(index)=>{return ()=> clickHandler(index)};
-
-        buttonPress.forEach((btn, index) =>{
-            //const handleIndexClick =handleClick(index);
-            btn.addEventListener('click',()=>clickHandler(index),{once:true}) 
-                
+        const buttonPress = document.querySelectorAll('.inner-gameboard');
+        buttonPress.forEach((btn, index)=>{
+            if (!btn.hasAttribute('data-listener')) {
+                btn.addEventListener('click', () => gameLogic(index));
+                btn.setAttribute('data-listener', 'true'); // Flag to indicate listener is attached
+            }
         })
 
     }
-    function clickHandler(index) {
-        console.log(`clicked${index}`);
+    //handles game logic managing turns/populating displays/checking for wins&ties/ invoking a newgame
+    function gameLogic(index) {
+        movesCounted += 1;
+        console.log(`moves made ${movesCounted}/9`)
+        console.log(`clicked cell id: ${index}, player: ${currentPlayer.GetMarker()}`);
         if (Gameboard.board[index] === '') {
             currentPlayer.OccupiePosition(index);
-            console.log(`populating position ${index} with ${currentPlayer.GetMarker()}`);
             Gameboard.populate(index, currentPlayer.GetMarker());
-
-            //console.log(Gameboard.board);
-            if (Checkwinner(currentPlayer)) {
-                console.log(`${currentPlayer.GetMarker()} wins`)
-                Gameboard.displayWins(currentPlayer.GetMarker());
-
-                if (currentPlayer.GetMarker() === 'x') {
-                    Gameboard.xCounter++
-
+            if(movesCounted !== 9){
+                if (Checkwinner(currentPlayer)) {
+                    console.log(`${currentPlayer.GetMarker()} wins`)
+                    Gameboard.displayWins(currentPlayer.GetMarker());
+                    movesCounted = 0;
+                    startNextRound()
+                    console.log(`Board after clear: ${Gameboard.board}`);
+                    console.log(`Player X's score: ${Gameboard.xCounter}, Player O's score: ${Gameboard.oCounter}`);
+                    
                 } else {
-                    Gameboard.oCounter++
-                }
-                Gameboard.clearGame();
+                    currentPlayer = currentPlayer === Gameboard.playerOne ? Gameboard.playerTwo : Gameboard.playerOne;
+                }  
+            }else if(movesCounted === 9){
+                movesCounted = 0;
+                console.log(`no winner this round! this is a tie `);
+                startNextRound();
                 console.log(`Board after clear: ${Gameboard.board}`);
                 console.log(`Player X's score: ${Gameboard.xCounter}, Player O's score: ${Gameboard.oCounter}`);
-                startNextRound()
-            } else {
-                currentPlayer = currentPlayer === Gameboard.playerOne ? Gameboard.playerTwo : Gameboard.playerOne;
+
             }
+            
         } else {
             console.log('this position is already occupied!')
         }
     }
-    function removeEventListeners(){
-        const buttonPress = document.querySelectorAll('.inner-gameboard');
-        buttonPress.forEach((btn, index)=>{
-            const newButton= btn.cloneNode(true);
-            newButton.className = 'inner-gameboard';
-            newButton.id = (index);
-            btn.parentNode.replaceChild(newButton, btn);
-            
-            //btn.removeEventListener('click', clickHandler);
-        })
-    }
-
     return {
         //manages each turn between each player object.
-        turnManager,
+        eventHandler,
     };
 })();
 //factory function for player creation takes gameboard array so it can interact with it
@@ -258,6 +233,7 @@ function Player(gameboardArray) {
                 innerArray[positionChoice] = marker;
             }
         },
+        //clears innerArray
         clearPlayer() {
             innerArray.fill("");
         },
