@@ -24,10 +24,18 @@
     display: flex;
 }
 .title{
-    margin-top: 12%;
+    margin-top: 7%;
     justify-self: center;
     align-self: center;
 }
+#turn{
+    margin-top: 2%;
+    justify-self: center;
+    align-self: center;
+    color:red;
+    font-size: 42;
+}
+
 #title{
     color:rgb(114, 115, 116);
     margin-top: 5%;

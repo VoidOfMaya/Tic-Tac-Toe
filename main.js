@@ -32,7 +32,7 @@ const Gameboard = (function () {
             const dialog = document.getElementById("modal");
             const selectXPlayerBtn = document.getElementById("x_button");
             const selectOPlayerBtn = document.getElementById("o_button");
-
+            const turnDeclare = document.getElementById('turn')
 
             dialog.showModal();
             selectXPlayerBtn.addEventListener('click', () => {
@@ -42,7 +42,9 @@ const Gameboard = (function () {
                 dialog.close();
                 dialog.style.display = 'none';
                 console.log(`marker has been set to: ${playerOne.GetMarker()}`);
-                gameFlow.eventHandler(playerOne);
+                turnDeclare.textContent = `its ${playerOne.GetMarker()}'s turn!`;                
+                gameFlow.eventHandler(playerOne);        
+
             })
             selectOPlayerBtn.addEventListener('click', () => {
 
@@ -51,7 +53,9 @@ const Gameboard = (function () {
                 dialog.close();
                 dialog.style.display = 'none';
                 console.log(`marker has been set to: ${playerOne.GetMarker()}`);
+                turnDeclare.textContent = `its ${playerOne.GetMarker()}'s turn!`; 
                 gameFlow.eventHandler(playerOne);
+               
             })
 
         },
@@ -94,8 +98,9 @@ const Gameboard = (function () {
 const GameFlow = (function () {
 
     let currentPlayer;
+    let nextPlayer;
     let movesCounted = 0;
-
+    const turnDeclare = document.getElementById('turn')
     //converts each array from blank space to a 0 and player marker to a 1 at index
     const readArray = (array) => {
         array.map((position, index) => {
@@ -165,6 +170,7 @@ const GameFlow = (function () {
     //handles game logic managing turns/populating displays/checking for wins&ties/ invoking a newgame
     function gameLogic(index) {
         movesCounted += 1;
+        
         console.log(`moves made ${movesCounted}/9`)
         console.log(`clicked cell id: ${index}, player: ${currentPlayer.GetMarker()}`);
 
@@ -181,9 +187,12 @@ const GameFlow = (function () {
                     movesCounted = 0;
                     startNextRound()
                     console.log(`Board after clear: ${Gameboard.board}`);
+                    nextPlayer = currentPlayer
+                    turnDeclare.textContent = `its ${nextPlayer.GetMarker()}'s turn!`;
                     
                 } else {
-
+                    nextPlayer = currentPlayer === Gameboard.playerOne ? Gameboard.playerTwo : Gameboard.playerOne;
+                    turnDeclare.textContent = `its ${nextPlayer.GetMarker()}'s turn!`;
                     currentPlayer = currentPlayer === Gameboard.playerOne ? Gameboard.playerTwo : Gameboard.playerOne;
                 }  
             }else if(movesCounted === 9){
