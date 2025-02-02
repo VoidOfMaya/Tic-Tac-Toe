@@ -153,6 +153,7 @@ const GameFlow = (function () {
           
         currentPlayer = startingPlayer;
         const buttonPress = document.querySelectorAll('.inner-gameboard');
+
         buttonPress.forEach((btn, index)=>{
             if (!btn.hasAttribute('data-listener')) {
                 btn.addEventListener('click', () => gameLogic(index));
@@ -166,22 +167,27 @@ const GameFlow = (function () {
         movesCounted += 1;
         console.log(`moves made ${movesCounted}/9`)
         console.log(`clicked cell id: ${index}, player: ${currentPlayer.GetMarker()}`);
+
         if (Gameboard.board[index] === '') {
+
             currentPlayer.OccupiePosition(index);
             Gameboard.populate(index, currentPlayer.GetMarker());
+
             if(movesCounted !== 9){
                 if (Checkwinner(currentPlayer)) {
+
                     console.log(`${currentPlayer.GetMarker()} wins`)
                     Gameboard.displayWins(currentPlayer.GetMarker());
                     movesCounted = 0;
                     startNextRound()
                     console.log(`Board after clear: ${Gameboard.board}`);
-                    console.log(`Player X's score: ${Gameboard.xCounter}, Player O's score: ${Gameboard.oCounter}`);
                     
                 } else {
+
                     currentPlayer = currentPlayer === Gameboard.playerOne ? Gameboard.playerTwo : Gameboard.playerOne;
                 }  
             }else if(movesCounted === 9){
+
                 movesCounted = 0;
                 console.log(`no winner this round! this is a tie `);
                 startNextRound();
@@ -195,7 +201,6 @@ const GameFlow = (function () {
         }
     }
     return {
-        //manages each turn between each player object.
         eventHandler,
     };
 })();
@@ -218,17 +223,8 @@ function Player(gameboardArray) {
         },
         // takes a players position index and inputs marker to the coresponding position on the gameboard array
         OccupiePosition(positionChoice) {
-
-            //console.log(`first gameboard array: ${gameboardArray}`)
-
-            /*if (gameboardArray[positionChoice] == "x" && gameboardArray[positionChoice] == "o") {
-                console.log(`you are trying to occupie position: ${positionChoice}\n in gameboard array: ${gameboardArray}`);
-                console.log("Action youre trying to make is not possible, This position is already occupied!")
-
-            }*/
             if (gameboardArray[positionChoice] == "") {
-                //gameboardArray.splice(positionChoice, 1, marker);
-                //innerArray.splice(positionChoice, 1, marker);
+
                 gameboardArray[positionChoice] = marker;
                 innerArray[positionChoice] = marker;
             }
